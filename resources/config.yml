@@ -1,0 +1,15 @@
+templates_path: templates
+
+skeletons_path: /tmp/skeletor/skeletons
+
+models:
+  - name: test
+    templates:
+      - source: template1
+        target: tested/template1
+
+skeletons:
+  - name: test
+    model: test
+    environment:
+      test: test

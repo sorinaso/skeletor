@@ -27,25 +27,28 @@ func (p *Path) CheckAbsolute() error {
 		return nil
 	}
 
-	return errors.New("The path " + p.Path + " must be absolute.")
-}
-
-func (p *Path) MustBeRelative() {
-	if err := p.CheckRelative(); err != nil {
-		panic(err.Error())
-	}
+	return errors.New("The path `" + p.Path + "` must be absolute.")
 }
 
 func (p *Path) CheckRelative() error {
-	if err := p.CheckValid(); err != nil {
-		return err
-	}
 
-	if strings.HasPrefix(p.Path, "/") {
-		return errors.New("The path " + p.Path + " must be relative.")
+	if !p.IsRelative() {
+		return errors.New("The path `" + p.Path + "` must be relative.")
 	}
 
 	return nil
+}
+
+func (p *Path) IsRelative() bool {
+	if err := p.CheckValid(); err != nil {
+		return false
+	}
+
+	if strings.HasPrefix(p.Path, "/") {
+		return false
+	}
+
+	return true
 }
 
 func (p *Path) CheckFile() error {
@@ -56,20 +59,14 @@ func (p *Path) CheckFile() error {
 	stat, err := os.Stat(p.Path)
 
 	if os.IsNotExist(err) {
-		return errors.New("El path " + p.Path + " no existe")
+		return errors.New("El path `" + p.Path + "` no existe")
 	}
 
 	if stat.IsDir() {
-		return errors.New("El path " + p.Path + " is a directory not a file")
+		return errors.New("El path `" + p.Path + "` is a directory not a file")
 	}
 
 	return nil
-}
-
-func (p *Path) MustBeARelativeFile() {
-	if err := p.CheckRelativeFile(); err != nil {
-		panic(err.Error())
-	}
 }
 
 func (p *Path) CheckRelativeFile() error {
@@ -92,20 +89,14 @@ func (p *Path) CheckDirectory() error {
 	stat, err := os.Stat(p.Path)
 
 	if os.IsNotExist(err) {
-		return errors.New("El path " + p.Path + " no existe")
+		return errors.New("El path `" + p.Path + "` no existe")
 	}
 
 	if !stat.IsDir() {
-		return errors.New("El path " + p.Path + " is a file not a directory")
+		return errors.New("El path `" + p.Path + "` is a file not a directory")
 	}
 
 	return nil
-}
-
-func (p *Path) MustBeARelativeDirectory() {
-	if err := p.CheckRelativeDirectory(); err != nil {
-		panic(err.Error())
-	}
 }
 
 func (p *Path) CheckRelativeDirectory() error {
@@ -118,12 +109,6 @@ func (p *Path) CheckRelativeDirectory() error {
 	}
 
 	return nil
-}
-
-func (p *Path) MustBeAAbsoluteDirectory() {
-	if err := p.CheckAbsoluteDirectory(); err != nil {
-		panic(err.Error())
-	}
 }
 
 func (p *Path) CheckAbsoluteDirectory() error {
@@ -146,8 +131,12 @@ func (p *Path) CheckValid() error {
 	return nil
 }
 
-func (p *Path) Join(path string) {
+func (p *Path) PostJoin(path string) {
 	p.Path = filepath.Join(p.Path, path)
+}
+
+func (p *Path) PreJoin(path string) {
+	p.Path = filepath.Join(path, p.Path)
 }
 
 func (p *Path) CreateDirectory() error {

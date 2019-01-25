@@ -11,10 +11,10 @@ type Template = struct {
 
 func NewTemplate(source string, target string) Template {
 	ps := utils.PathUtils(source)
-	ps.MustBeRelative()
+	utils.MustNotReturnAnError(ps.CheckRelative())
 
 	pt := utils.PathUtils(target)
-	pt.MustBeRelative()
+	utils.MustNotReturnAnError(pt.CheckRelative())
 
 	return Template{Source: source, Target: target}
 }

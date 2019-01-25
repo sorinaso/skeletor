@@ -1,5 +1,10 @@
 package skeletor
 
+import (
+	"path/filepath"
+	"skeletor/utils"
+)
+
 type ProjectWorkspaces = struct {
 	Templates Workspace
 	Skeletons Workspace
@@ -101,8 +106,26 @@ func getModelsFromConfig(config Config) []Model {
 }
 
 func getWorkspacesFromConfig(config Config) (ProjectWorkspaces, error) {
-	tw := NewWorkspace(config.TemplatesPath)
-	sw := NewWorkspace(config.SkeletonsPath)
+	templatesPath := utils.PathUtils(config.TemplatesPath)
+	skeletonPath := utils.PathUtils(config.SkeletonsPath)
+	configPathDirectory := filepath.Dir(config.Path)
+
+	configPathDirectory, err := filepath.Abs(configPathDirectory)
+
+	if err != nil {
+		return ProjectWorkspaces{}, err
+	}
+
+	if templatesPath.IsRelative() {
+		templatesPath.PreJoin(configPathDirectory)
+	}
+
+	if skeletonPath.IsRelative() {
+		skeletonPath.PreJoin(configPathDirectory)
+	}
+
+	tw := NewWorkspace(templatesPath.Path)
+	sw := NewWorkspace(skeletonPath.Path)
 
 	return ProjectWorkspaces{Templates: tw, Skeletons: sw}, nil
 }

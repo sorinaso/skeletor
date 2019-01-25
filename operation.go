@@ -1,9 +1,9 @@
 package skeletor
 
 import (
-	"skeletor/utils"
 	"os"
 	"path/filepath"
+	"skeletor/utils"
 	"text/template"
 
 	log "github.com/sirupsen/logrus"
@@ -42,7 +42,7 @@ func NewTextTemplateOperation(
 func (to textTemplateOperation) GetDestinationFilePath() string {
 	dstPath := utils.PathUtils(to.skeletons_directory)
 
-	dstPath.Join(to.destination)
+	dstPath.PostJoin(to.destination)
 
 	return dstPath.Path
 }
@@ -70,7 +70,11 @@ func (to textTemplateOperation) Execute() error {
 
 	rootTpl, err := to.getRootTemplate()
 
-	log.Info("Templates: ", *rootTpl.Templates()[0])
+	if len(rootTpl.Templates()) > 0 {
+		log.Info("Templates: ", *rootTpl.Templates()[0])
+	} else {
+		log.Info("No hay templates en el directorio")
+	}
 
 	if err != nil {
 		return err

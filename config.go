@@ -25,6 +25,12 @@ type Config struct {
 func NewConfig(configurationPath string) (Config, error) {
 	ret := Config{}
 
+	cpu := utils.PathUtils(configurationPath)
+
+	utils.MustNotReturnAnError(cpu.CheckFile())
+
+	ret.Path = cpu.Path
+
 	p := utils.PathUtils(configurationPath)
 
 	if err := p.UnmarshalYAML(&ret); err != nil {

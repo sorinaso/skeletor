@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	project, err := skeletor.NewProject("resources/project_repository/projects.yml")
+	project, err := skeletor.NewProject("resources/config.yml")
 
 	if err != nil {
 		panic(err.Error())
