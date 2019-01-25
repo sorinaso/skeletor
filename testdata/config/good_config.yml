@@ -1,0 +1,30 @@
+path: /tmp
+
+templates_path: tp
+
+skeletons_path: sp
+
+models:
+  - name: tm
+    templates:
+      - source: tm_t1_src
+        target: tm_t1_tgt
+
+  - name: tm2
+    templates:
+      - source: tm2_t1_src
+        target: tm2_t1_tgt
+      - source: tm2_t2_src
+        target: tm2_t2_tgt
+
+
+skeletons:
+  - name: test
+    model: test
+    environment:
+      test: test
+
+  - name: test2
+    model: test2
+    environment:
+      test2: test2
