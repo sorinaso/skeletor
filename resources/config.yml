@@ -12,4 +12,4 @@ skeletons:
   - name: test
     model: test
     environment:
-      test: test
+      test: testing
