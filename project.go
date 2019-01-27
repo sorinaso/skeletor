@@ -13,7 +13,7 @@ type ProjectWorkspaces = struct {
 type Project struct {
 	Config     Config
 	Workspaces ProjectWorkspaces
-	Skeletons  []Skeleton
+	Skeletons  map[string]Skeleton
 	Models     []Model
 }
 
@@ -48,7 +48,7 @@ func (pr *Project) GetWorkSpaces() ProjectWorkspaces {
 	return pr.Workspaces
 }
 
-func (pr *Project) GetSkeletons() []Skeleton {
+func (pr *Project) GetSkeletons() map[string]Skeleton {
 	return pr.Skeletons
 }
 
@@ -66,8 +66,8 @@ func (pr *Project) Create() error {
 	return nil
 }
 
-func getSkeletonsFromConfig(config Config, projectWorkspaces ProjectWorkspaces) []Skeleton {
-	var ret []Skeleton
+func getSkeletonsFromConfig(config Config, projectWorkspaces ProjectWorkspaces) map[string]Skeleton {
+	ret := map[string]Skeleton{}
 
 	for _, skeleton := range config.Skeletons {
 		if model, ok := ModelMap[skeleton.Model]; ok {
@@ -85,7 +85,7 @@ func getSkeletonsFromConfig(config Config, projectWorkspaces ProjectWorkspaces) 
 				)
 			}
 
-			ret = append(ret, newSkeleton)
+			ret[newSkeleton.Name] = newSkeleton
 		} else {
 			panic("The model " + skeleton.Model + " is not defined.")
 		}
