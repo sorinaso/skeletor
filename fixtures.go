@@ -95,8 +95,11 @@ func FixtureProjectGoodConfigYAML() Project {
 	}
 
 	return Project{
-		Models:     []Model{yamlModel, yamlModel2},
-		Skeletons:  []Skeleton{yamlSkeleton, yamlSkeleton2},
+		Models: []Model{yamlModel, yamlModel2},
+		Skeletons: map[string]Skeleton{
+			yamlSkeleton.Name:  yamlSkeleton,
+			yamlSkeleton2.Name: yamlSkeleton2,
+		},
 		Workspaces: yamlWorkspaces,
 	}
 }
