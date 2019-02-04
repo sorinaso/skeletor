@@ -78,7 +78,7 @@ func getSkeletonsFromConfig(config Config, projectWorkspaces ProjectWorkspaces) 
 					newSkeleton.Operations,
 					NewTextTemplateOperation(
 						projectWorkspaces.Templates.Path,
-						projectWorkspaces.Skeletons.Path,
+						filepath.Join(projectWorkspaces.Skeletons.Path, newSkeleton.Name),
 						t.Source, newSkeleton.Environment,
 						t.Target,
 					),
