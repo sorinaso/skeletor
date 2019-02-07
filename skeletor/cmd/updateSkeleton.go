@@ -23,7 +23,7 @@ if you want to update one skeleton  directory you can run this command.
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		project, err := skeletor.NewProject("config.yml")
+		project, err := skeletor.NewProject("skeletor.yml")
 
 		if err != nil {
 			panic(err.Error())
