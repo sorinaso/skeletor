@@ -16,25 +16,21 @@ type Operation interface {
 type textTemplateOperation struct {
 	templates_directory string
 	skeletons_directory string
-	name                string
 	environment         Environment
-	destination         string
+	template            Template
 }
 
 func NewTextTemplateOperation(
 	templates_directory string,
 	skeletons_directory string,
-	name string,
 	environment Environment,
-	destination string,
+	template Template,
 ) textTemplateOperation {
 	ret := textTemplateOperation{}
 
 	ret.templates_directory = templates_directory
 	ret.skeletons_directory = skeletons_directory
-	ret.name = name
-	ret.environment = environment
-	ret.destination = destination
+	ret.template = template
 
 	return ret
 }
@@ -42,7 +38,7 @@ func NewTextTemplateOperation(
 func (to textTemplateOperation) GetDestinationFilePath() string {
 	dstPath := utils.PathUtils(to.skeletons_directory)
 
-	dstPath.PostJoin(to.destination)
+	dstPath.PostJoin(to.template.Target)
 
 	return dstPath.Path
 }
@@ -60,12 +56,6 @@ func (to textTemplateOperation) Execute() error {
 		return err
 	}
 
-	dstFile, err := os.OpenFile(dstPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0660)
-
-	if err != nil {
-		return err
-	}
-
 	log.Info("Obtaining template list from directory " + to.templates_directory)
 
 	rootTpl, err := to.getRootTemplate()
@@ -80,9 +70,25 @@ func (to textTemplateOperation) Execute() error {
 		return err
 	}
 
-	log.Info("Rendering template ", to.name, " to ", dstPath, "(Environment: ", to.environment, ")")
+	dstPathExist := true
 
-	err = rootTpl.ExecuteTemplate(dstFile, to.name, to.environment)
+	if _, err := os.Stat(dstPath); os.IsNotExist(err) {
+		dstPathExist = false
+	}
+
+	if to.template.Overwrite || !dstPathExist {
+		dstFile, err := os.OpenFile(dstPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0660)
+
+		if err != nil {
+			return err
+		}
+
+		log.Info("Rendering template ", to.template.Source, " to ", dstPath, "(Environment: ", to.environment, ")")
+
+		err = rootTpl.ExecuteTemplate(dstFile, to.template.Source, to.environment)
+	} else {
+		log.Info("Skiping template ", to.template.Source, " to ", dstPath, "(Environment: ", to.environment, ") because file exists and overwrite is false")
+	}
 
 	if err != nil {
 		return err

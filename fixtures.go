@@ -43,8 +43,8 @@ func FixturesBadTemplates() []Template {
 
 func FixturesGoodTemplates() []Template {
 	return []Template{
-		NewTemplate("test_good_template", "test_good_template"),
-		NewTemplate("test_good_template_2", "test_good_template_2"),
+		NewTemplate("test_good_template", "test_good_template", true),
+		NewTemplate("test_good_template_2", "test_good_template_2", true),
 	}
 }
 
@@ -72,9 +72,8 @@ func FixtureProjectGoodConfigYAML() Project {
 			NewTextTemplateOperation(
 				yamlWorkspaces.Templates.Path,
 				yamlWorkspaces.Skeletons.Path,
-				t.Source,
 				yamlSkeleton.Environment,
-				t.Target,
+				t,
 			),
 		)
 	}
@@ -87,9 +86,8 @@ func FixtureProjectGoodConfigYAML() Project {
 			NewTextTemplateOperation(
 				yamlWorkspaces.Templates.Path,
 				yamlWorkspaces.Skeletons.Path,
-				t.Source,
 				yamlSkeleton2.Environment,
-				t.Target,
+				t,
 			),
 		)
 	}
