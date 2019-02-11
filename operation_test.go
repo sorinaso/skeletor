@@ -2,9 +2,9 @@ package skeletor
 
 import (
 	"io/ioutil"
-	"skeletor/utils"
 	"os"
 	"path/filepath"
+	"skeletor/utils"
 	"testing"
 )
 
@@ -18,9 +18,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_without_params",
 			skeletons_directory: "/tmp",
-			name:                "template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "/tmp/text_template_test_without_parameters",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "template1.tpl",
+				Target: "/tmp/text_template_test_without_parameters",
+			},
 		},
 		mustPass: true,
 	},
@@ -29,9 +31,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_without_params",
 			skeletons_directory: "/tmp",
-			name:                "template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "/tmp/noexiste/text_template_test_without_parameters",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "template1.tpl",
+				Target: "/tmp/noexiste/text_template_test_without_parameters",
+			},
 		},
 		mustPass: true,
 	},
@@ -40,9 +44,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_with_params",
 			skeletons_directory: "/tmp",
-			name:                "template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "/tmp/text_template_test_with_parameters",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "template1.tpl",
+				Target: "/tmp/text_template_test_with_parameter",
+			},
 		},
 		mustPass: true,
 	},
@@ -53,9 +59,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_without_params",
 			skeletons_directory: "/tmp",
-			name:                "nested/template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "text_template_test_without_parameters_nested",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "template1.tpl",
+				Target: "text_template_test_without_parameters_nested",
+			},
 		},
 		mustPass: true,
 	},
@@ -64,9 +72,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_without_params",
 			skeletons_directory: "/tmp",
-			name:                "nested/template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "/noexiste/text_template_test_without_parameters_nested",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "nested/template1.tpl",
+				Target: "/noexiste/text_template_test_without_parameters_nested",
+			},
 		},
 		mustPass: true,
 	},
@@ -75,9 +85,11 @@ var TestTextTemplateOperationExecuteCases = []struct {
 		to: textTemplateOperation{
 			templates_directory: "./testdata/text_template/one_template_with_params",
 			skeletons_directory: "/tmp",
-			name:                "nested/template1.tpl",
-			environment:         map[interface{}]interface{}{"a": "b"},
-			destination:         "text_template_test_with_parameters_nested",
+			environment:         Environment{"a": "b"},
+			template: Template{
+				Source: "nested/template1.tpl",
+				Target: "text_template_test_with_parameters_nested",
+			},
 		},
 		mustPass: true,
 	},
@@ -95,9 +107,8 @@ func TestTextTemplateOperationExecute(t *testing.T) {
 			to := NewTextTemplateOperation(
 				tt.to.templates_directory,
 				tt.to.skeletons_directory,
-				tt.to.name,
-				tt.to.environment,
-				tt.to.destination,
+				Environment{"a": "b"},
+				tt.to.template,
 			)
 
 			err = to.Execute()
@@ -117,9 +128,8 @@ func TestTextTemplateOperationExecute(t *testing.T) {
 			to := NewTextTemplateOperation(
 				tt.to.templates_directory,
 				tt.to.skeletons_directory,
-				tt.to.name,
-				tt.to.environment,
-				tt.to.destination,
+				Environment{"a": "b"},
+				tt.to.template,
 			)
 
 			err := ioutil.WriteFile(to.GetDestinationFilePath(), []byte("hello\ngohkjfdhkdshfkjsfdhkjdfhsd\n"), 0644)

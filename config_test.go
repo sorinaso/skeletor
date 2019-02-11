@@ -18,26 +18,17 @@ var TestNewConfigCases = []struct {
 			SkeletonsPath: "sp",
 			Models: []struct {
 				Name      string
-				Templates []struct {
-					Source string
-					Target string
-				}
+				Templates []Template
 			}{
 				{
 					Name: "tm",
-					Templates: []struct {
-						Source string
-						Target string
-					}{
+					Templates: []Template{
 						{Source: "tm_t1_src", Target: "tm_t1_tgt"},
 					},
 				},
 				{
 					Name: "tm2",
-					Templates: []struct {
-						Source string
-						Target string
-					}{
+					Templates: []Template{
 						{Source: "tm2_t1_src", Target: "tm2_t1_tgt"},
 						{Source: "tm2_t2_src", Target: "tm2_t2_tgt"},
 					},
