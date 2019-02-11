@@ -1,0 +1,19 @@
+templates_path: templates
+
+skeletons_path: ./skeletons
+
+models:
+  - name: test
+    templates:
+      - source: template1
+        target: tested/template1
+        overwrite: true
+      - source: template2
+        target: tested/template2
+        overwrite: false
+
+skeletons:
+  - name: test
+    model: test
+    environment:
+      test: testing
