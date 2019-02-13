@@ -30,6 +30,7 @@ func NewTextTemplateOperation(
 
 	ret.templates_directory = templates_directory
 	ret.skeletons_directory = skeletons_directory
+	ret.environment = environment
 	ret.template = template
 
 	return ret
