@@ -6,3 +6,5 @@ generator/templates
 * Al template agregarle el mode del archivo a generar
 
 * Cambiar el name de skeleton por algo mas como destination asi queda claro que ahi se tiran los archivos.
+
+* En el template chequear que el sourcde exista.
