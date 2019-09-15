@@ -7,4 +7,6 @@ generator/templates
 
 * Cambiar el name de skeleton por algo mas como destination asi queda claro que ahi se tiran los archivos.
 
+* Poder asociar mas de un model a un skeleton.
+
 * En el template chequear que el sourcde exista.
