@@ -1,0 +1,4 @@
+* Crear el concepto de generator que sea un directorio con la siguiente estructura:
+
+generator/model.yaml
+generator/templates
