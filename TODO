@@ -2,3 +2,5 @@
 
 generator/model.yaml
 generator/templates
+
+* Al template agregarle el mode del archivo a generar
